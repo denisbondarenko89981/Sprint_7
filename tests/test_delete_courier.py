@@ -1,5 +1,6 @@
 import allure
 
+
 @allure.epic("Курьеры")
 @allure.feature("Удаление курьера")
 class TestDeleteCourier:
@@ -14,14 +15,16 @@ class TestDeleteCourier:
 
         resp = api.delete_courier(courier_id)
         assert resp.status_code == 200
-        assert resp.json()["ok"]
+        assert resp.json()["ok"] is True
 
     @allure.title("Ошибка при удалении курьера без id")
     def test_delete_courier_without_id_returns_400(self, api):
         resp = api.delete_courier("")
-        assert resp.status_code == 400 or resp.status_code == 404
+        assert resp.status_code == 400
+        assert "message" in resp.json()
 
     @allure.title("Ошибка при удалении курьера с несуществующим id")
     def test_delete_courier_with_invalid_id_returns_404(self, api):
         resp = api.delete_courier(999999)
         assert resp.status_code == 404
+        assert "message" in resp.json()
